@@ -1,0 +1,4 @@
+include README.md
+include pyshm_ffi/*.h
+include pyshm_ffi/*.c
+include pyshm_ffi/pyshm_build.py
