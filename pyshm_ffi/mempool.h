@@ -29,6 +29,22 @@ struct mempool *mempool_create(shm_allocator_t *shm, unsigned n,
                                 unsigned elt_size, unsigned flags);
 void mempool_destroy(struct mempool *mp);
 
+static inline unsigned
+mempool_count(struct mempool *mp) {
+    return mp->max_eles - ring_count(mp->r);
+}
+
+/*
+ * return the unused count of memory blocks
+ */
+static inline unsigned
+mempool_free_count(struct mempool *mp) {
+    return ring_count(mp->r);
+}
+
+/*
+ * return the unused count of memory blocks
+ */
 static inline int
 mempool_get(struct mempool *mp, void **obj_p) {
     return ring_dequeue(mp->r, obj_p);
@@ -46,7 +62,7 @@ mempool_mc_get(struct mempool *mp, void **obj_p) {
 
 static inline int
 mempool_get_bulk(struct mempool *mp, void **obj_tbl, unsigned n) {
-
+    return ring_dequeue_bulk(mp->r, obj_tbl, n, NULL);
 }
 
 static inline int
@@ -66,7 +82,7 @@ mempool_mp_put(struct mempool *mp, void *obj) {
 
 static inline int
 mempool_put_bulk(struct mempool *mp, void **obj_tbl, unsigned n) {
-
+    return ring_enqueue_bulk(mp->r, obj_tbl, n, NULL);
 }
 #ifdef __cplusplus
 }

@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <inttypes.h>
 #include <errno.h>
 #include <sys/queue.h>
@@ -36,12 +37,12 @@ ring_init(struct ring *r, unsigned count, unsigned flags)
 {
 
 	/* compilation-time checks */
-	/* BUILD_BUG_ON((sizeof(struct ring) & */
-	/* 		  CACHE_LINE_MASK) != 0); */
-	/* BUILD_BUG_ON((offsetof(struct ring, cons) & */
-	/* 		  CACHE_LINE_MASK) != 0); */
-	/* BUILD_BUG_ON((offsetof(struct ring, prod) & */
-	/* 		  CACHE_LINE_MASK) != 0); */
+	BUILD_BUG_ON((sizeof(struct ring) &
+			  CACHE_LINE_MASK) != 0);
+	BUILD_BUG_ON((offsetof(struct ring, cons) &
+			  CACHE_LINE_MASK) != 0);
+	BUILD_BUG_ON((offsetof(struct ring, prod) &
+			  CACHE_LINE_MASK) != 0);
 
 	/* init the ring structure */
 	memset(r, 0, sizeof(*r));

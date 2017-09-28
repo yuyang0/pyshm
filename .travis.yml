@@ -1,31 +1,30 @@
 language: python
 cache:
-  directories:
-    $HOME/.cache/pip
-# sudo: false
-# addons:
-#   apt:
-#     packages:
+  directories: "$HOME/.cache/pip"
 matrix:
   include:
-    - python: 2.7
-      env: TOX_ENV=py27
-    - python: 3.5
-      env: TOX_ENV=py35
-    - python: 3.6
-      env: TOX_ENV=py36
-    # - python: pypy
-    #   env: TOX_ENV=pypy
-    # - python: 3.5
-    #   env: TOX_ENV=flake8
-
+  - python: 2.7
+    env: TOX_ENV=py27
+  - python: 3.5
+    env: TOX_ENV=py35
+  - python: 3.6
+    env: TOX_ENV=py36
+  - python: pypy
+    env: TOX_ENV=pypy
 before_install:
-  - sudo apt-get install -y coreutils build-essential 
-  # - sudo apt-get install -y linux-headers-`uname -r`
-
+- sudo apt-get install -y coreutils build-essential
 install:
-  - pip install -U pip
-  - pip install tox
-  - pip install cffi
+- pip install -U pip
+- pip install tox
+- pip install cffi
 script:
-  - tox -e $TOX_ENV
+- tox -e $TOX_ENV
+
+deploy:
+  provider: pypi
+  user: yuyang
+  password:
+    secure: UjrkGDErAcOq+roWtj3M4v8PhjeI5wlBdroxnoKjB1GtZwkrcdYOf/jJEaADFlAiI9UgweDpVoNkYvvG8DdInM/RrcxcdXxFZAfVmPtL/3VN8sBVSP0EzMpQLMalxeGQR/LbC9fYKYrbst8pXkTr7SwdiMRarPPvvCUvQUP0TZiY2tyg93/up1LWUbI+EPttdS4gGvRLfLJto0UzR61L6n2IRB2pQxowH7w0LjOQ6kwjeorAhXZXSUOh/7KwbXAN0479nWtKr55NuDtoWxILuhPA0F4pQra9dwE3s8d2uTv+ayvmWPD6naRtuzO5w/rYLBGRkLxh/6S6UnKj6M3DjvU3nJIFv6HOGLVt0jvC0K7KlUqxj5XALg7h9PWC1RaWsG4szhqIa3EtJOr7VDe7Ep/823O+eDKzIezFpW/sVlMVRz/+309w8kLVd3CQ5dZY6lXfy+/+h25j+wNnFsznWCagiVxASdTNIzfB/nekALLo4ARHnVhaypM2uJ0Dk9F2agNtuHXbezWUCmDLNzJav84Xrj5jQ+Zu9k+EDGitw4IkUsDRvf/B1ZIeTFu4lPn/N0uDrOJEboq5zWUtGFW5TxG/K+cZuYVNhGynf15SWwImrDE410s86D9QQjVCHE/gtOrlFcdt0jK3T4qxCSE2LaF/ok1vO1VgwJZiHS+rfXc=
+  on:
+    tags: true
+    repo: yuyang0/pyshm

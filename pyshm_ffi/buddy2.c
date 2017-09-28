@@ -75,7 +75,7 @@ void buddy2_destroy(struct buddy2 *self) {
     }
 }
 
-int buddy2_alloc(struct buddy2 *self, int size) {
+int buddy2_alloc(struct buddy2 *self, unsigned size) {
     unsigned index = 0;
     unsigned node_size;
     unsigned offset = 0;
@@ -156,7 +156,7 @@ int buddy2_size(struct buddy2 *self, int offset) {
 
 void buddy2_dump(buddy2_t *self) {
     char canvas[65];
-    int i, j;
+    unsigned i, j;
     unsigned node_size, offset;
 
     if (self == NULL) {

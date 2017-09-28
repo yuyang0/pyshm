@@ -6,6 +6,7 @@
 #define _UTILS_H_ 1
 
 #define CACHE_LINE_SIZE 64
+#define CACHE_LINE_MASK (CACHE_LINE_SIZE-1)
 
 #define likely(x)       __builtin_expect((x),1)
 #define unlikely(x)     __builtin_expect((x),0)
@@ -123,5 +124,25 @@ is_aligned(void *ptr, unsigned align)
 {
 	return PTR_ALIGN(ptr, align) == ptr;
 }
+/*********** Macros for compile type checks ********/
+
+/**
+ * Triggers an error at compilation time if the condition is true.
+ */
+#ifndef __OPTIMIZE__
+#define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)]))
+#else
+extern int BUILD_BUG_ON_detected_error;
+#define BUILD_BUG_ON(condition) do {            \
+        ((void)sizeof(char[1 - 2*!!(condition)]));  \
+        if (condition)                              \
+            BUILD_BUG_ON_detected_error = 1;    \
+    } while(0)
+#endif
+
+#ifndef offsetof
+/** Return the offset of a field in a structure. */
+#define offsetof(TYPE, MEMBER)  __builtin_offsetof (TYPE, MEMBER)
+#endif
 
 #endif /* _UTILS_H_ */

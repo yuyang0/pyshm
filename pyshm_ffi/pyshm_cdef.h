@@ -94,6 +94,12 @@ struct mempool *mempool_create(shm_allocator_t *shm, unsigned n,
                                 unsigned elt_size, unsigned flags);
 void mempool_destroy(struct mempool *mp);
 
+static inline unsigned
+mempool_count(struct mempool *mp);
+
+static inline unsigned
+mempool_free_count(struct mempool *mp);
+
 static inline int
 mempool_get(struct mempool *mp, void **obj_p);
 

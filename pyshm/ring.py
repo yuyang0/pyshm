@@ -23,6 +23,14 @@ class RingError(Exception):
         return "%s %s" % (self.prefix, os.strerror(self.errno))
 
 
+class EmptyError(Exception):
+    pass
+
+
+class FullError(Exception):
+    pass
+
+
 class Ring(object):
     def __init__(self, count, flags, shm=None):
         if shm is None:
@@ -48,6 +56,8 @@ class Ring(object):
         if res == 0:
             return res
         else:
+            if self.free_count == 0:
+                raise FullError()
             raise RingError("enqueue: ")
 
     def dequeue(self, size, flags=None):
@@ -62,10 +72,21 @@ class Ring(object):
         if res == 0:
             return ffi.buffer(obj_p[0], size)
         else:
+            if self.used_count == 0:
+                raise EmptyError()
             raise RingError("dequeue: ")
+
+    @property
+    def used_count(self):
+        return lib.ring_count(self.c_ring)
+
+    @property
+    def free_count(self):
+        return lib.ring_free_count(self.c_ring)
 
     def cleanup(self):
         lib.ring_destroy(self.c_ring)
+        self.c_ring = ffi.NULL
 
     def __enter__(self):
         return self
