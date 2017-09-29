@@ -558,10 +558,6 @@ atomic64_init(atomic64_t *v)
  *   The value of the counter.
  */
 static inline int64_t
-atomic64_read(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
-static inline int64_t
 atomic64_read(atomic64_t *v)
 {
 #ifdef __LP64__
@@ -579,7 +575,6 @@ atomic64_read(atomic64_t *v)
 	return tmp;
 #endif
 }
-#endif
 
 /**
  * Atomically set a 64-bit counter.
@@ -589,10 +584,6 @@ atomic64_read(atomic64_t *v)
  * @param new_value
  *   The new value of the counter.
  */
-static inline void
-atomic64_set(atomic64_t *v, int64_t new_value);
-
-#ifdef FORCE_INTRINSICS
 static inline void
 atomic64_set(atomic64_t *v, int64_t new_value)
 {
@@ -609,7 +600,6 @@ atomic64_set(atomic64_t *v, int64_t new_value)
 	}
 #endif
 }
-#endif
 
 /**
  * Atomically add a 64-bit value to a counter.
@@ -620,15 +610,10 @@ atomic64_set(atomic64_t *v, int64_t new_value)
  *   The value to be added to the counter.
  */
 static inline void
-atomic64_add(atomic64_t *v, int64_t inc);
-
-#ifdef FORCE_INTRINSICS
-static inline void
 atomic64_add(atomic64_t *v, int64_t inc)
 {
 	__sync_fetch_and_add(&v->cnt, inc);
 }
-#endif
 
 /**
  * Atomically subtract a 64-bit value from a counter.
@@ -639,15 +624,10 @@ atomic64_add(atomic64_t *v, int64_t inc)
  *   The value to be subtracted from the counter.
  */
 static inline void
-atomic64_sub(atomic64_t *v, int64_t dec);
-
-#ifdef FORCE_INTRINSICS
-static inline void
 atomic64_sub(atomic64_t *v, int64_t dec)
 {
 	__sync_fetch_and_sub(&v->cnt, dec);
 }
-#endif
 
 /**
  * Atomically increment a 64-bit counter by one and test.
@@ -656,15 +636,10 @@ atomic64_sub(atomic64_t *v, int64_t dec)
  *   A pointer to the atomic counter.
  */
 static inline void
-atomic64_inc(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
-static inline void
 atomic64_inc(atomic64_t *v)
 {
 	atomic64_add(v, 1);
 }
-#endif
 
 /**
  * Atomically decrement a 64-bit counter by one and test.
@@ -673,15 +648,10 @@ atomic64_inc(atomic64_t *v)
  *   A pointer to the atomic counter.
  */
 static inline void
-atomic64_dec(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
-static inline void
 atomic64_dec(atomic64_t *v)
 {
 	atomic64_sub(v, 1);
 }
-#endif
 
 /**
  * Add a 64-bit value to an atomic counter and return the result.
@@ -697,15 +667,10 @@ atomic64_dec(atomic64_t *v)
  *   The value of v after the addition.
  */
 static inline int64_t
-atomic64_add_return(atomic64_t *v, int64_t inc);
-
-#ifdef FORCE_INTRINSICS
-static inline int64_t
 atomic64_add_return(atomic64_t *v, int64_t inc)
 {
 	return __sync_add_and_fetch(&v->cnt, inc);
 }
-#endif
 
 /**
  * Subtract a 64-bit value from an atomic counter and return the result.
@@ -721,15 +686,10 @@ atomic64_add_return(atomic64_t *v, int64_t inc)
  *   The value of v after the subtraction.
  */
 static inline int64_t
-atomic64_sub_return(atomic64_t *v, int64_t dec);
-
-#ifdef FORCE_INTRINSICS
-static inline int64_t
 atomic64_sub_return(atomic64_t *v, int64_t dec)
 {
 	return __sync_sub_and_fetch(&v->cnt, dec);
 }
-#endif
 
 /**
  * Atomically increment a 64-bit counter by one and test.
@@ -742,14 +702,10 @@ atomic64_sub_return(atomic64_t *v, int64_t dec)
  * @return
  *   True if the result after the addition is 0; false otherwise.
  */
-static inline int atomic64_inc_and_test(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
 static inline int atomic64_inc_and_test(atomic64_t *v)
 {
 	return atomic64_add_return(v, 1) == 0;
 }
-#endif
 
 /**
  * Atomically decrement a 64-bit counter by one and test.
@@ -762,14 +718,10 @@ static inline int atomic64_inc_and_test(atomic64_t *v)
  * @return
  *   True if the result after subtraction is 0; false otherwise.
  */
-static inline int atomic64_dec_and_test(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
 static inline int atomic64_dec_and_test(atomic64_t *v)
 {
 	return atomic64_sub_return(v, 1) == 0;
 }
-#endif
 
 /**
  * Atomically test and set a 64-bit atomic counter.
@@ -782,14 +734,10 @@ static inline int atomic64_dec_and_test(atomic64_t *v)
  * @return
  *   0 if failed; else 1, success.
  */
-static inline int atomic64_test_and_set(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
 static inline int atomic64_test_and_set(atomic64_t *v)
 {
 	return atomic64_cmpset((volatile uint64_t *)&v->cnt, 0, 1);
 }
-#endif
 
 /**
  * Atomically set a 64-bit counter to 0.
@@ -797,13 +745,9 @@ static inline int atomic64_test_and_set(atomic64_t *v)
  * @param v
  *   A pointer to the atomic counter.
  */
-static inline void atomic64_clear(atomic64_t *v);
-
-#ifdef FORCE_INTRINSICS
 static inline void atomic64_clear(atomic64_t *v)
 {
 	atomic64_set(v, 0);
 }
-#endif
 
 #endif /* _ATOMIC_H_ */
