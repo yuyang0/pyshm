@@ -29,18 +29,11 @@ def find_version(*paths):
 
 version = find_version('pyshm', '__init__.py')
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except(IOError, ImportError):
-    long_description = open('README.md').read()
-
-
 setup(
     name="pyshm",
     version=version,
     description="python share memory library",
-    long_description=long_description,
+    long_description=open('README.rst').read(),
     url="https://github.com/yuyang0/pyshm",
     author="Yu Yang",
     author_email="yyangplus@gmail.com",
